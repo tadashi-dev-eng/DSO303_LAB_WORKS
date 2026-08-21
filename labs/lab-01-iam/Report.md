@@ -1,12 +1,18 @@
 ## 1. Aim / Objective
-
+The Lab 1: IAM is to build AWS from scratch using the principle of least privilege, role-based access control (RBAC), and policy lifecycle management.
 
 ## 2. Introduction
-
+Lab 1 is about Setting up Docker, Docker Compose, Git, and Floci emulator with hybrid persistence, as well as configuring the local AWS CLI profile. Moreover it is about building the IAM foundation for and designing an enterprise identity model, configuring role-based access control (RBAC), writing least privilege customer-managed policies, creating trust relationships for EC2/Lambda execution roles, and handling access keys safely.
 
 ## 3. Use Case
+The use case are : 
 
-
+1. Human Identity & Role-Based Access Control (RBAC)
+2. Temporary Elevated Access (Developer AssumeRole)
+3. Application Identity & EC2 Instance Roles
+4. Serverless Execution Security (Lambda)
+5. Self-Service Credential Management
+6. Compliance Auditing & Read-Only Inspection
 
 ## 5. Implementation Procedure
 
