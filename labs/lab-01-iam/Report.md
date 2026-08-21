@@ -1,3 +1,12 @@
+## 1. Aim / Objective
+
+
+## 2. Introduction
+
+
+## 3. Use Case
+
+
 
 ## 5. Implementation Procedure
 
@@ -235,4 +244,12 @@ Predict — before running anything — the decision for usms-audit-01 on ec2:Cr
 ![alt text](../../screenshots/spp.png)
 
 ---
+
+Commited the work
+
+![alt text](../../screenshots/commit.png)
+
+Verification
+
+![alt text](../../screenshots/v.png)
 
