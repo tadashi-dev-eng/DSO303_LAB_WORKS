@@ -1,3 +1,131 @@
+## 1. Aim / Objective
+
+The main aim of the Lab 2 is to design, provision, secure, and validate a highly available multi-tier VPC network infrastructure using the AWS CLI, enforcing strict network isolation between public and private workloads while verifying state persistence across system restarts.
+
+The objectives of the lab 2 is : 
+1. VPC & Subnet Topology
+2. Tiered Network Defense
+3. Outbound Routing & Service Integration
+
+## 2. Introduction
+
+Lab 2 is about hands on experience provisioning the core network architecture for the University Student Management System (USMS) using the AWS CLI. Where I created a custom VPC across multiple Availability Zones, implement defense-in-depth using stateful Security Groups and stateless NACLs and configure secure outbound connectivity via a NAT Gateway and an S3 VPC Endpoint. Through CLI-driven automation, resource tagging governance, and persistence testing, you will master the operational fundamentals of secure AWS networking.
+
+## 3. Use Case
+
+The use case are :
+- Web/App Tier (Public Subnets)
+- Database/Application Tier (Private Subnets)
+- Secure Maintenance & Outbound Access
+- Cost-Optimized Service Access
+
+## 4. System Architecture / Design
+
+
+## 5. Implementation Procedure
+
+1. Step 1: Discover Account and Region Information
+
+- Queried the current AWS caller identity and configured environment variables ($AWS_REGION_COURSE, $AWS_ACCOUNT_ID) to ensure all deployment commands target the intended local region and scope.
+
+2. Step 2: Create usms-vpc
+
+- Provisioned the central Virtual Private Cloud using CIDR block 10.0.0.0/16 and tagged it Name=usms-vpc and Project=USMS to establish the foundational network boundary.
+
+3. Step 3: Enable DNS Resolution and Hostnames
+
+- Modified VPC attributes to set enableDnsSupport=true and enableDnsHostnames=true, allowing instances within the network to automatically resolve AWS public/private DNS endpoints.
+
+4. Step 4: Create Public Subnet A
+
+- Carved out usms-public-subnet-a with CIDR 10.0.1.0/24 in Availability Zone us-east-1a for public-facing web infrastructure.
+
+5. Step 5: Create Public Subnet B
+
+- Carved out usms-public-subnet-b with CIDR 10.0.2.0/24 in Availability Zone us-east-1b to establish multi-AZ redudancy for the public tier.
+
+6. Step 6: Create Private Subnet A
+
+- Carved out usms-private-subnet-a with CIDR 10.0.3.0/24 in us-east-1a to host isolated application and database workloads.
+
+7. Step 7: Create and Attach the Internet Gateway
+
+- Provisioned usms-igw and attached it to usms-vpc, creating the entry/exit point for public internet traffic.
+
+8. Step 8: Create and Configure the Public Route Table
+
+- Created usms-public-rt, added a default route (0.0.0.0/0) pointing to usms-igw, and associated it with both public subnets (A and B).
+
+9. Step 9: Allocate Elastic IP and Create NAT Gateway
+
+- Allocated usms-nat-eip and built usms-nat in usms-public-subnet-a to facilitate secure outbound internet access for private workloads.
+
+10. Step 10: Create and Configure the Private Route Table
+
+- Created usms-private-rt, added a default route (0.0.0.0/0) pointing to usms-nat, and associated it with usms-private-subnet-a.
+
+11. Step 11: Create the Application Security Group
+
+- Provisioned usms-app-sg within usms-vpc to govern stateful network access for backend application instances.
+
+12. Step 12: Configure Inbound Rules for Application Security Group
+
+- Added ingress rules allowing HTTP/HTTPS traffic from the public subnets into usms-app-sg.
+
+13. Step 13: Create the Database Security Group
+
+- Provisioned usms-db-sg within usms-vpc to enforce strict access controls on internal data stores.
+
+14. Step 14: Restrict Inbound Access for Database Security Group
+
+- Configured an inbound rule allowing PostgreSQL/MySQL access to usms-db-sg only if the source traffic originates from usms-app-sg.
+
+15. Step 15: Create Custom Network ACL for Private Subnet
+
+- Created usms-private-nacl as a stateless subnet-level security barrier and associated it directly with usms-private-subnet-a.
+
+16. Step 16: Configure Inbound Rules for Private NACL
+
+- Defined numbered ingress rules allowing ephemeral return traffic and local VPC subnets while dropping unauthorized protocol requests.
+
+17. Step 17: Configure Outbound Rules for Private NACL
+
+- Defined egress rules permitting outbound traffic to internal subnets, S3 prefix lists, and NAT Gateway destinations.
+
+18. Step 18: Verify Security Group and NACL Interoperability
+
+- Executed CLI query dry-runs to validate that stateful SGs and stateless NACLs do not conflict, upholding defense-in-depth principles.
+
+19. Step 19: Audit Network Route Tables
+
+- Queried public and private route tables to confirm proper target associations (IGW for public subnets, NAT for private subnets).
+
+20. Step 20: Provision S3 Gateway VPC Endpoint
+
+- Created usms-s3-endpoint and attached it to usms-private-rt, enabling direct, free S3 network access without traversing the NAT Gateway.
+
+21. Step 21: Verify S3 Endpoint Managed Routes
+
+- Inspected usms-private-rt to confirm the automatic injection of S3 prefix list routes (pl-xxxxxxxx).
+
+22. Step 22: Audit Global Project Tags
+
+- Ran aws ec2 describe-tags with filters to ensure all VPC resources strictly comply with governance tagging (Project=USMS).
+
+23. Step 23: Perform Pre-Restart State Baseline Snapshot
+
+- Recorded resource counts (VPC, Subnets, Security Groups) to outputs/lab-02-pre-restart.txt prior to restarting the emulator.
+
+24. Step 24: Restart Floci Emulator and Verify Persistence
+
+- Stopped and started the Floci daemon, re-queried API resource IDs by tag, generated outputs/lab-02-post-restart.txt, and ran diff to prove 100% network state persistence.
+
+25. Step 25: Save Persistent Environment File
+
+- Exported all 11 verified resource variables into configs/lab-02.env to allow seamless variable inheritance for subsequent labs.
+  
+## 6. Results and Evidence
+
 For the lab 2 we need to check the set up and found that the prerequistes not present
 
 ![alt text](../../screenshots/Lab-2/lab2-Prerequisites.png)
