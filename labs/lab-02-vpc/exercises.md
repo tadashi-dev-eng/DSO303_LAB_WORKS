@@ -434,3 +434,7 @@ configs/lab-02.env file is fully populated and verified.
 
 ![alt text](../../screenshots/Lab-2/24.png)
 
+## Step 25 Commit your work
+
+![alt text](image.png)
+
