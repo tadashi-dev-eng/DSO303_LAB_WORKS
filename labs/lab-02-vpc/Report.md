@@ -564,5 +564,5 @@ configs/lab-02.env file is fully populated and verified.
 
 ## Step 25 Commit your work
 
-![alt text](image.png)
+![alt text](../../screenshots/lab-2/git.png)
 
