@@ -140,5 +140,297 @@ Creating the VPC uses the /16 IPv4 address.
 
 ## Step 5 Enable DNS support and DNS hostnames
 
+The VPC created from the CLI has DNS resolution on but DNS hostnames off. Without hostnames, an instance with a public IP gets no public DNS name. 
 
+The two command configure the built-in DNS resolution services for custom AWS Virtual Private Cloud (VPC) by
+
+1. ``--enable-dns-support '{"Value":true}'`` that enables the DNS inside the VPC .
+2. ``--enable-dns-hostnames '{"Value":true}'`` that assignes automatic DNS hostnames in the VPC
+
+![alt text](../../screenshots/Lab-2/dns.png)
+
+To verify the both DNS attributes were successfully enabled on the VPC in the enabling DNS and DNS hostname.
+
+![alt text](../../screenshots/Lab-2/verifiy.png)
+
+
+## Step 6 Create and attach the internet gateway
+
+It provides Internet Gateway (IGW) the logical edge router that connects the custom VPC to the public internet and attaches it to usms-vpc. It enables bidirectional communication between public subnet resources and external networks, as well as 1-to-1 Static NAT translation for public IP addresses.
+
+![alt text](../../screenshots/Lab-2/lgw.png)
+
+
+## Step 7 Create the public subnet in us-east-1a
+
+It provides Subnet within the VPC scoped to a specific Availability Zone (us-east-1a). It reserves a dedicated /24 IPv4 block (10.0.1.0/24)
+
+![alt text](../../screenshots/Lab-2/region.png)
+
+* state is available
+* IP address is reserved from 251 
+* PublicIP is set to false
+
+## Step 8 Turn on auto-assign public IPv4 for the public subnet¶
+
+It modifies the attribute settings of usms-public-subnet-a to automatically allocate a public IPv4 address to any EC2 instance launched within it. This eliminates the requirement to manually assign public IPs during compute provisioning.
+
+![alt text](../../screenshots/Lab-2/IPv4.png)
+
+## Step 9 Create the private subnet in us-east-1a
+
+It provides an isolated Private Subnet (10.0.3.0/24) in Availability Zone us-east-1a to host sensitive workloads (e.g., database instances). Unlike the public subnet, this subnet is designed with zero internet connectivity and explicit restriction against public IP auto-assignment, implementing a defense-in-depth security model.
+
+![alt text](../../screenshots/Lab-2/step9.png)
+
+## Step 10 Create the public route table and the default route
+
+transforms usms-public-subnet-a into a functionally public network segment by provisioning a custom Public Route Table and adding a Default Route (0.0.0.0/0) pointing to the Internet Gateway ($IGW_ID). This enables outbound and inbound internet connectivity while preserving internal VPC routing.
+
+![alt text](../../screenshots/Lab-2/step10.png)
+
+After verification the route table contains two active rules
+
+![alt text](../../screenshots/Lab-2/iptable.png)
+
+## Step 11 Associate the public subnet with the public route table
+
+It binds usms-public-subnet-a to the Public Route Table ($PUBLIC_RT_ID) created in Step 10. Without explicit association, subnets fallback to the VPC's main route table which lacks internet routes. This association makes the subnet genuinely public.
+
+![alt text](../../screenshots/Lab-2/step11.png)
+
+---
+
+## Your turn
+
+Following the step 7,8 and 11 Created ``usms-public-subnet-b`` with CIDR ``10.0.2.0/24`` in ``us-east-1b``
+
+![alt text](../../screenshots/Lab-2/1b.png)
+
+Enabled auto-assign public IPv4 address on launch and associate the new subnet with the public route table
+
+![alt text](../../screenshots/Lab-2/auto.png)
+
+
+Verifing all 3 subnets in the VPC
+
+![alt text](../../screenshots/Lab-2/3.png)
+
+Verify public route table associations
+
+![alt text](../../screenshots/Lab-2/4.png)
+
+---
+
+## Step 12 Create the private route table and associate the private subnet
+
+It provides a dedicated Private Route Table (usms-private-rt) containing only the internal local route (10.0.0.0/16 -> local) and explicitly associates it with usms-private-subnet-a. This isolates the private subnet from the VPC's Main Route Table, guaranteeing zero internet access even if the Main Route Table is altered later.
+
+![alt text](../../screenshots/Lab-2/s12.png)
+
+
+## Step 13 Prove the two subnets are actually different
+
+It performs a formal validation audit of your network layout. By querying the AWS API for the effective route tables of both subnets, it empirically verifies that the public subnet routes outbound traffic to the Internet Gateway while the private subnet remains strictly isolated.
+
+![alt text](../../screenshots/Lab-2/13.png)
+
+## Step 14 Create the application security group
+
+It provides an instance-level firewall (usms-app-sg) inside $VPC_ID designed for public-facing web servers. It opens port 80 (HTTP) to external internet users while restricting port 22 (SSH) strictly to internal VPC addresses (10.0.0.0/16), adhering to the principle of least privilege.
+
+AWS assigns a specific sgr- ID to every individual security group rule. The result shows three unique resource identifiers returned sequentially.
+
+![alt text](../../screenshots/Lab-2/14.png)
+
+---
+Your turn 
+
+Added an inbound rule to usms-app-sg allowing TCP 443 from 0.0.0.0/0, and give the rule a description so that a future reader knows why it is there.
+
+![alt text](../../screenshots/Lab-2/ur-turn.png)
+
+---
+
+## Step 15 Create the database security group, sourced from the application group
+
+It provides the firewall shell (usms-db-sg) for the private database tier inside $VPC_ID. It establishes the isolated security boundary for data resources prior to defining specific ingress authorization rules.
+
+![alt text](../../screenshots/Lab-2/15a.png)
+
+Second part of the command creates a local JSON configuration file (policies/usms-db-sg-ingress.json) that defines an ingress rule allowing PostgreSQL traffic (port 5432) into the database tier. Instead of referencing static IP ranges, it explicitly targets the Application Security Group ($APP_SG_ID) as the authorized traffic source.
+
+![alt text](../../screenshots/Lab-2/15b.png)
+
+Third part of the command reads the JSON specification created in Part 2 (policies/usms-db-sg-ingress.json) and applies it to the Database Security Group ($DB_SG_ID). This officially authorizes PostgreSQL traffic (port 5432) originating strictly from resources attached to usms-app-sg.
+
+![alt text](../../screenshots/Lab-2/15c.png)
+
+![alt text](../../screenshots/Lab-2/15d.png)
+
+
+## Step 16 Read the groups back, and understand what stateful means
+
+It performs a consolidated audit of all Security Groups in $VPC_ID and walks through the lifecycle of a full client-to-application-to-database request. It demonstrates the administrative efficiency of stateful tracking, showing how two explicitly defined inbound rules automatically handle four network connection legs without manual response filtering.
+
+![alt text](../../screenshots/Lab-2/16.png)
+
+- JMESPath length() Function: Counts the elements in the IpPermissions (inbound) and IpPermissionsEgress (outbound) arrays for clean summary output.
+
+- The default Security Group: Reveals the implicit fallback SG created automatically with every VPC. (If an EC2 instance is launched without specifying --security-group-ids, AWS attaches this default group, which blocks all public ingress).
+
+## Step 17 Explore the default network ACL, then create a private one 
+
+Part A of the command inspects the Default Network Access Control List (NACL) automatically created alongside your VPC. It illustrates how NACL rules are structured, evaluated sequentially by rule number, and how a default NACL acts as a pass-through filter (allow all) until custom subnet-level restrictions are introduced.
+
+![alt text](../../screenshots/Lab-2/17a.png)
+
+Part B of the command provide a custom Network Access Control List shell (usms-private-nacl) inside $VPC_ID. It creates an isolated, subnet-level security wrapper for the private database tier before specific stateless allow/deny rules are attached.
+
+![alt text](../../screenshots/Lab-2/17b.png)
+
+Part C of the command configures explicit, stateless packet-filtering rules on $PRIVATE_NACL_ID to strictly control inbound and outbound traffic for the private database tier. Because NACLs are stateless, rules must be defined in pairs to allow both the initial request and the corresponding return traffic on ephemeral ports.
+
+- Inbound 100: PostgreSQL from anywhere inside the VPC.
+- Inbound 110: return traffic for connections this subnet opened outbound.
+- Outbound 100: replies to the application tier.
+- Outbound 110: HTTPS out, so the data tier can fetch OS updates through the NAT gateway.
+
+```cmd 
+tadashi@tadashi:~/Desktop/aws-floci-course$ aws ec2 describe-network-acls \
+  --network-acl-ids "$PRIVATE_NACL_ID" \
+  --query 'NetworkAcls[0].Entries[].{Rule:RuleNumber,Egress:Egress,Action:RuleAction,CIDR:CidrBlock,Ports:PortRange}' \
+  --output json
+[
+    {
+        "Rule": 32767,
+        "Egress": false,
+        "Action": "deny",
+        "CIDR": "0.0.0.0/0",
+        "Ports": null
+    },
+    {
+        "Rule": 32767,
+        "Egress": true,
+        "Action": "deny",
+        "CIDR": "0.0.0.0/0",
+        "Ports": null
+    },
+    {
+        "Rule": 100,
+        "Egress": false,
+        "Action": "allow",
+        "CIDR": "10.0.0.0/16",
+        "Ports": {
+            "From": 5432,
+            "To": 5432
+        }
+    },
+    {
+        "Rule": 110,
+        "Egress": false,
+        "Action": "allow",
+        "CIDR": "0.0.0.0/0",
+        "Ports": {
+            "From": 1024,
+            "To": 65535
+        }
+    },
+    {
+        "Rule": 100,
+        "Egress": true,
+        "Action": "allow",
+        "CIDR": "10.0.0.0/16",
+        "Ports": {
+            "From": 1024,
+            "To": 65535
+        }
+    },
+    {
+        "Rule": 110,
+        "Egress": true,
+        "Action": "allow",
+        "CIDR": "0.0.0.0/0",
+        "Ports": {
+            "From": 443,
+            "To": 443
+        }
+    }
+]
+tadashi@tadashi:~/Desktop/aws-floci-course$ 
+
+```
+
+## Step 18 Associate the private NACL with the private subnet¶
+
+It officially activates your custom stateless firewall (usms-private-nacl) by linking it to usms-private-subnet-a. Because every subnet in AWS is strictly required to have an active NACL at all times, you cannot simply "associate" a new one—you must find the existing association ID and atomically swap (replace) it using replace-network-acl-association.
+
+![alt text](../../screenshots/Lab-2/18.png)
+
+![alt text](../../screenshots/Lab-2/18b.png)
+
+## Step 19 Give the private subnet outbound internet access with a NAT gateway
+
+It step allocates a static, public IPv4 address (Elastic IP) within your VPC's scope on AWS. This public IP address will be assigned to the NAT Gateway in Part 2, giving instances in the isolated private subnet outbound internet connectivity (e.g., to pull OS and software updates) while keeping them shielded from incoming internet traffic.
+
+![alt text](../../screenshots/Lab-2/19a.png)
+
+Part B of the command provides the NAT Gateway (usms-nat) inside the public subnet (usms-public-subnet-a) and attaches the Elastic IP ($NAT_EIP_ALLOC_ID) allocated in Part 1. This creates the managed network translation node required to route outbound traffic from your private subnet to the internet.
+
+![alt text](../../screenshots/Lab-2/19b.png)
+
+Part C of the command pauses script execution until the newly created NAT Gateway transitions from its initial pending state into the available state. AWS takes roughly 30 to 60 seconds to allocate elastic network interfaces and provision underlying underlying infrastructure for a NAT Gateway, during which time route table attachments will fail if attempted prematurely.
+
+![alt text](../../screenshots/Lab-2/19c.png)
+
+## Step 20 Point the private route table at the NAT gateway
+
+It adds a default route (0.0.0.0/0) to the Private Route Table ($PRIVATE_RT_ID), directing all internet-bound traffic originating from the private subnet to the newly created NAT Gateway ($NAT_GW_ID). This completes the outbound networking path for the data tier.
+
+![alt text](../../screenshots/Lab-2/20.png)
+
+
+## Step 21 Create the S3 gateway endpoint
+
+It provides an S3 Gateway VPC Endpoint (usms-s3-endpoint) for $VPC_ID and automatically injects a managed route into the private route table ($PRIVATE_RT_ID). This enables instances in the isolated private subnet to communicate with Amazon S3 directly over the private AWS network backbone—completely bypassing the NAT Gateway, eliminating data egress charges, and reducing latency.
+
+![alt text](../../screenshots/Lab-2/21.png)
+
+verification 
+
+![alt text](../../screenshots/Lab-2/21b.png)
+
+## Step 22 Audit your tags
+
+It performs a global tagging audit across all EC2/VPC resources provisioned within your current region. It verifies compliance with project governance guidelines (specifically Section 11 of your course contract), ensuring every created resource carries the mandatory Project=USMS key-value pair.
+
+![alt text](../../screenshots/Lab-2/22.png)
+
+---
+Your turn 
+builds a formatted inventory of all subnets created inside usms-vpc. It filters resources strictly within your target VPC ($VPC_ID), extracts custom tags (Name and Tier), sorts the output so that private subnets appear first, and outputs a formatted table directly into the required report file (outputs/lab-02-subnet-inventory.txt).
+
+![alt text](../../screenshots/Lab-2/task.png)
+
+## Step 23 Prove the network survives a restart
+
+It captures a baseline snapshot of your network state before restarting the Floci emulator. It records the primary VPC ID, the total subnet count, and the total security group count into outputs/lab-02-pre-restart.txt to establish the "ground truth" for state persistence.
+
+![alt text](../../screenshots/Lab-2/23.png)
+
+Part B of the command stops and restarts the local Floci AWS emulator service, introducing a controlled disturbance (perturbation) to test whether your network architecture state persists across daemon restarts.
+
+![alt text](../../screenshots/Lab-2/23b.png)
+
+Part c of step is the final verification step re-establishes environment context and queries the API for your resources by tag search rather than using stored memory. It outputs the post-restart network counts to outputs/lab-02-post-restart.txt and performs a diff against your pre-restart snapshot (outputs/lab-02-pre-restart.txt) to confirm full state persistence across daemon restarts.
+
+![alt text](../../screenshots/Lab-2/23c.png)
+
+## Step 24 Write configs/lab-02.env
+
+It saves every essential network resource ID (VPC, Subnets, Security Groups, Route Tables, NACL, NAT Gateway, EIP, Endpoint) into a persistent configuration file: configs/lab-02.env. This ensures downstream modules (Lab 3+) can source these variables instantly without needing to manually query AWS or re-declare environment variables.
+
+configs/lab-02.env file is fully populated and verified.
+
+![alt text](../../screenshots/Lab-2/24.png)
 
