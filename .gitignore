@@ -30,3 +30,11 @@ Thumbs.db
 *.swp
 .vscode/
 .idea/
+keys/
+*.pem
+keys/
+*.pem
+*.env
+*.pem
+*.env
+*.pem
