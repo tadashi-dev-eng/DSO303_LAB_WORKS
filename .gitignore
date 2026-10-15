@@ -38,3 +38,7 @@ keys/
 *.pem
 *.env
 *.pem
+*.pem
+configs/*.env
+*.pem
+**/*.pem
