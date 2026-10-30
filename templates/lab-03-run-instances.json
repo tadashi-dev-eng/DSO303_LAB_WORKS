@@ -1,0 +1,51 @@
+{
+  "ImageId": "ami-0abcdef1234567890",
+  "InstanceType": "t3.micro",
+  "MinCount": 1,
+  "MaxCount": 1,
+  "KeyName": "usms-app-key",
+  "SubnetId": "subnet-5a73aa05",
+  "SecurityGroupIds": [
+    "sg-d5728ea09e4353ee3"
+  ],
+  "IamInstanceProfile": {
+    "Name": "usms-ec2-app-profile"
+  },
+  "TagSpecifications": [
+    {
+      "ResourceType": "instance",
+      "Tags": [
+        {
+          "Key": "Name",
+          "Value": "usms-web-01"
+        },
+        {
+          "Key": "Project",
+          "Value": "USMS"
+        },
+        {
+          "Key": "Tier",
+          "Value": "web"
+        },
+        {
+          "Key": "Lab",
+          "Value": "03"
+        }
+      ]
+    },
+    {
+      "ResourceType": "volume",
+      "Tags": [
+        {
+          "Key": "Name",
+          "Value": "usms-web-01-root"
+        },
+        {
+          "Key": "Project",
+          "Value": "USMS"
+        }
+      ]
+    }
+  ],
+  "UserData": "IyEvYmluL2Jhc2gKIyBVU01TIHdlYiB0aWVyIGJvb3RzdHJhcC4gUnVucyBPTkNFLCBhcyByb290LCBhdCBmaXJzdCBib290LCB2aWEgY2xvdWQtaW5pdC4KIyBFdmVyeXRoaW5nIGhlcmUgbXVzdCBiZSBub24taW50ZXJhY3RpdmUgYW5kIGlkZW1wb3RlbnQuCnNldCAteApleGVjID4gL3Zhci9sb2cvdXNtcy1ib290c3RyYXAubG9nIDI+JjEKCmVjaG8gIlVTTVMgYm9vdHN0cmFwIHN0YXJ0aW5nIGF0ICQoZGF0ZSAtdSArJVktJW0tJWRUJUg6JU06JVNaKSIKCmRuZiAteSB1cGRhdGUKZG5mIC15IGluc3RhbGwgbmdpbngKCiMgQXNrIHRoZSBpbnN0YW5jZSBhYm91dCBpdHNlbGYsIHVzaW5nIElNRFN2MiAodG9rZW4tYmFzZWQsIHRoZSBzZWN1cmUgZGVmYXVsdCkuClRPS0VOPSQoY3VybCAtc1ggUFVUICJodHRwOi8vMTY5LjI1NC4xNjkuMjU0L2xhdGVzdC9hcGkvdG9rZW4iIFwKICAtSCAiWC1hd3MtZWMyLW1ldGFkYXRhLXRva2VuLXR0bC1zZWNvbmRzOiAzMDAiKQptZXRhKCkgewogIGN1cmwgLXMgLUggIlgtYXdzLWVjMi1tZXRhZGF0YS10b2tlbjogJFRPS0VOIiBcCiAgICAiaHR0cDovLzE2OS4yNTQuMTY5LjI1NC9sYXRlc3QvbWV0YS1kYXRhLyQxIgp9CgpJTlNUQU5DRV9JRD0kKG1ldGEgaW5zdGFuY2UtaWQpCkFaPSQobWV0YSBwbGFjZW1lbnQvYXZhaWxhYmlsaXR5LXpvbmUpClBSSVZBVEVfSVA9JChtZXRhIGxvY2FsLWlwdjQpCgpjYXQgPiAvdXNyL3NoYXJlL25naW54L2h0bWwvaW5kZXguaHRtbCA8PEhUTUwKPCFkb2N0eXBlIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KPGhlYWQ+PG1ldGEgY2hhcnNldD0idXRmLTgiPjx0aXRsZT5VU01TIC0gVW5pdmVyc2l0eSBTdHVkZW50IE1hbmFnZW1lbnQgU3lzdGVtPC90aXRsZT48L2hlYWQ+Cjxib2R5IHN0eWxlPSJmb250LWZhbWlseTpzeXN0ZW0tdWksc2Fucy1zZXJpZjttYXgtd2lkdGg6NDByZW07bWFyZ2luOjRyZW0gYXV0byI+CiAgPGgxPlVTTVMgU3R1ZGVudCBQb3J0YWw8L2gxPgogIDxwPlVuaXZlcnNpdHkgU3R1ZGVudCBNYW5hZ2VtZW50IFN5c3RlbSAmbWRhc2g7IHdlYiB0aWVyPC9wPgogIDx0YWJsZSBib3JkZXI9IjEiIGNlbGxwYWRkaW5nPSI2IiBjZWxsc3BhY2luZz0iMCI+CiAgICA8dHI+PHRkPkluc3RhbmNlPC90ZD48dGQ+JHtJTlNUQU5DRV9JRH08L3RkPjwvdHI+CiAgICA8dHI+PHRkPkF2YWlsYWJpbGl0eSBab25lPC90ZD48dGQ+JHtBWn08L3RkPjwvdHI+CiAgICA8dHI+PHRkPlByaXZhdGUgYWRkcmVzczwvdGQ+PHRkPiR7UFJJVkFURV9JUH08L3RkPjwvdHI+CiAgICA8dHI+PHRkPkJvb3RzdHJhcHBlZDwvdGQ+PHRkPiQoZGF0ZSAtdSArJVktJW0tJWRUJUg6JU06JVNaKTwvdGQ+PC90cj4KICA8L3RhYmxlPgo8L2JvZHk+CjwvaHRtbD4KSFRNTAoKIyBBIG1hY2hpbmUtcmVhZGFibGUgZW5kcG9pbnQsIHNvIGEgaGVhbHRoIGNoZWNrIGRvZXMgbm90IGhhdmUgdG8gcGFyc2UgSFRNTC4KcHJpbnRmICd7InNlcnZpY2UiOiJ1c21zLXdlYiIsInN0YXR1cyI6Im9rIiwiaW5zdGFuY2UiOiIlcyIsImF6IjoiJXMifVxuJyBcCiAgIiRJTlNUQU5DRV9JRCIgIiRBWiIgPiAvdXNyL3NoYXJlL25naW54L2h0bWwvaGVhbHRoLmpzb24KCnN5c3RlbWN0bCBlbmFibGUgLS1ub3cgbmdpbngKZWNobyAiVVNNUyBib290c3RyYXAgY29tcGxldGUiCg=="
+}
