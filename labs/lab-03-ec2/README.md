@@ -299,3 +299,14 @@ Commiting the works in the Git repo.
 
 ![alt text](../../screenshots/Lab-3/step23.png)
 
+### 7. Verification
+
+Performs end-to-end automated validation of all compute, storage, key pair, IAM, and image artifacts created across Lab 03 by creating and executed scripts/utilities/verify-lab-03.sh to run 36 assertion checks spanning environment persistence, negative public exposure checks, permission masks (chmod 600), and Git tracking hygiene.
+
+![alt text](../../screenshots/Lab-3/v7.png)
+
+### 7.1 Build the end-of-course cleanup script
+
+Constructed a dependency-aware teardown script to cleanly de-provision all compute, storage, networking, and security key artifacts at the end of the course by Creating scripts/cleanup/lab-03-cleanup.sh featuring interactive prompt confirmation (DELETE USMS COMPUTE) and structured resource disassociation/deletion ordering.
+
+![alt text](../../screenshots/Lab-3/v7.1.png)
