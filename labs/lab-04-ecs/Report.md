@@ -362,7 +362,7 @@ git ls-files outputs/
 
 ![Before commit](../../screenshots/Lab-4/28-step13-before-commit.png)
 
-**Screenshot 24 - Explicit paths staged and committed**
+**Screenshot 24 - The commit and the files it contains (screenshots folder hidden)**
 
 ![Commit](../../screenshots/Lab-4/29-step13-commit.png)
 

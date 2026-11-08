@@ -509,7 +509,7 @@ git ls-files outputs/
 
 ![Step 19 before](../../screenshots/Lab-5/43-step19-before.png)
 
-**Screenshot 35 - Explicit paths staged and committed**
+**Screenshot 35 - The commit and the files it contains**
 
 ![Step 19 commit](../../screenshots/Lab-5/44-step19-commit.png)
 
@@ -543,7 +543,7 @@ With `configs/lab-05.env` moved away and the variable removed, the script gives 
 
 ![Exercise 2 missing](../../screenshots/Lab-5/36-ex2-missing-file.png)
 
-**Screenshot 39 - Commit explaining why the assertion changed**
+**Screenshot 39 - The commit message explaining why the assertion changed**
 
 ![Exercise 2 commit](../../screenshots/Lab-5/37-ex2-commit.png)
 
