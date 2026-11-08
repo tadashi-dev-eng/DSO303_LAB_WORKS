@@ -354,7 +354,7 @@ git check-ignore -v outputs/lab-04-assumed-role.json
 git ls-files outputs/
 ```
 
-**Result:** The assumed-role file is ignored by `.gitignore:8`, and `outputs/.gitkeep` is the only tracked file under `outputs/`. The work was committed locally as `cc9c2b0`.
+**Result:** The assumed-role file is ignored by `.gitignore:8`, and `outputs/.gitkeep` is the only tracked file under `outputs/`. The work was committed locally as `0d91a76`.
 
 **Note:** The lab's `git add` list includes `configs/lab-04.env`, but line 42 of `.gitignore` (`configs/*.env`) excludes it. That rule comes from an earlier decision to untrack env files, so I did not force-add it, and the file stays local. The pre-existing deletion of `templates/lab-03-run-instances-full.json` was not part of this lab and was not staged.
 

@@ -501,7 +501,7 @@ git check-ignore -v outputs/lab-05-path-proof.txt
 git ls-files outputs/
 ```
 
-**Result:** The output file is ignored by `.gitignore:8`, and `outputs/.gitkeep` is the only tracked file there. The work was committed locally as `d798d74`.
+**Result:** The output file is ignored by `.gitignore:8`, and `outputs/.gitkeep` is the only tracked file there. The work was committed locally as `4c1acef`.
 
 **Note:** The lab's `git add` includes `configs/lab-05.env`, but line 42 of `.gitignore` (`configs/*.env`) excludes it, so it stays local, as in Lab 04.
 
