@@ -713,15 +713,3 @@ The most useful lesson came from Step 13. The API reported success and the chang
 The objectives were partly achieved on this emulator. The load balancer, target group, listener, rule and security cutover were built, verified and shown to survive a restart, and their identifiers are recorded for Lab 06. The service attachment was accepted but not retained by Floci, so target registration, health checks, draining and served requests remain unproven and are recorded above and not assumed.
 
 I learned how the objects of an Application Load Balancer fit together, how to migrate traffic by building the new path before removing the old one, and why a read-back matters more than a success message. Load balancing matters because it separates a service's name from the temporary tasks behind it, which is what makes the scaling in the next lab possible.
-
-## 10. Appendix
-
-**Additional Files**
-
-- [exercises.md](exercises.md) - the five independent exercises
-- [notes/lab-05-notes.md](../../notes/lab-05-notes.md) - support path, Floci limitations, review questions
-- [usms-alb-sg-ingress.json](../../policies/usms-alb-sg-ingress.json), [HTTPS rule](../../policies/usms-alb-sg-ingress-https.json), [usms-enrolment-sg-ingress-alb.json](../../policies/usms-enrolment-sg-ingress-alb.json)
-- [listener default actions](../../templates/lab-05-listener-default-actions.json), [rule conditions](../../templates/lab-05-rule-conditions.json), [rule actions](../../templates/lab-05-rule-actions.json), [service load balancers](../../templates/lab-05-service-load-balancers.json)
-- [verify-lab-05.sh](../../scripts/utilities/verify-lab-05.sh), [usms-lb-report.sh](../../scripts/utilities/usms-lb-report.sh), [usms-resource-label.sh](../../scripts/utilities/usms-resource-label.sh), [student-fallback-demo.py](../../scripts/utilities/student-fallback-demo.py)
-- [lab-05-cleanup.sh](../../scripts/cleanup/lab-05-cleanup.sh) - not run, end of course only
-- `configs/lab-05.env` and the `outputs/lab-05-*` files - kept locally because the repository's `.gitignore` excludes them

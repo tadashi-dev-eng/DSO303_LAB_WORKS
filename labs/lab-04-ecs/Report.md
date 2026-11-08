@@ -555,20 +555,3 @@ Floci differed from real AWS in several ways. `Settings` came back null for Cont
 The objectives of this practical were achieved. The USMS enrolment service was deployed on ECS Fargate across two private subnets, with separated IAM roles, a group-referenced security rule and 17 recorded values for the next labs. Verification passed every check except one explained false positive, and the configuration survived a restart of the emulator. The items that could not be demonstrated on Floci are recorded above rather than assumed.
 
 I learned the four ECS objects, the difference between the execution and task roles, and how a private task reaches a public registry. I also practised verifying what a tool reports against the underlying state. ECS matters because it turns running an application into maintaining a declared state, which is the foundation that the load balancing and auto scaling of the next two labs build on.
-
-## 10. Appendix
-
-**Additional Files**
-
-- [exercises.md](exercises.md) - the five independent exercises
-- [notes/lab-04-notes.md](../../notes/lab-04-notes.md) - support path, Floci limitations, review questions
-- [trust-ecs-tasks.json](../../policies/trust-ecs-tasks.json)
-- [usms-ecs-task-execution-policy.json](../../policies/usms-ecs-task-execution-policy.json)
-- [usms-enrolment-sg-ingress.json](../../policies/usms-enrolment-sg-ingress.json)
-- [lab-04-taskdef.json](../../templates/lab-04-taskdef.json), [v1](../../templates/lab-04-taskdef-v1.json), [v2](../../templates/lab-04-taskdef-v2.json)
-- [verify-lab-04.sh](../../scripts/utilities/verify-lab-04.sh)
-- [lab-04-ecs-inventory.sh](../../scripts/utilities/lab-04-ecs-inventory.sh)
-- [lab-04-cleanup.sh](../../scripts/cleanup/lab-04-cleanup.sh) - not run, end of course only
-- `configs/lab-04.env` and `outputs/lab-04-lab03-linkage.txt` - kept locally because the repository's `.gitignore` excludes them
-
-**Sources:** [Lab 04 instructions](https://norbutlepcha25.github.io/dso303/Lab/Lab-04-ECS.html), [Report format](https://norbutlepcha25.github.io/dso303/Lab/overview.html), [AWS Price List API for ECS, us-east-1](https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonECS/current/us-east-1/index.json).
