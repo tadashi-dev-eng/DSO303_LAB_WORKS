@@ -108,6 +108,8 @@ The server-side filter from the exercise, `Name=instance.group-id`, returned **s
 
 ![First attempt mismatch](../../screenshots/Lab-4/26-ex5-linkage.png)
 
+![Instances returned by the filter](../../screenshots/Lab-4/26b-ex5-mismatch-explained.png)
+
 I did not treat that as the answer. Printing each returned instance's real security groups showed that only `usms-web-01` carries `usms-app-sg`, so this Floci build is not applying the `instance.group-id` filter.
 
 ![Groups on the returned instances](../../screenshots/Lab-4/26c-ex5-instance-groups.png)
