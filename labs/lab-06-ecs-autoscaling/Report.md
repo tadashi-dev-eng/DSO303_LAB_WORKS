@@ -40,7 +40,6 @@ Application Auto Scaling is commonly used for:
 
 ## 4. System Architecture / Design
 
-![USMS auto scaling architecture](../../screenshots/Lab-6/architecture.png)
 
 *CloudWatch metrics feed two kinds of alarm: four managed by the target tracking policies, and `usms-enrolment-queue-high`, which I wrote. Alarms invoke policies, policies decide a capacity clamped to the scalable target's 2..10, and Application Auto Scaling writes that single integer to the ECS service through the service-linked role. ECS, the private subnets and the load balancer from Labs 02 to 05 do everything after that. The orange dashed arrows are the path this Floci build accepted but did not run. Source: own diagram of the resources built in this lab.*
 

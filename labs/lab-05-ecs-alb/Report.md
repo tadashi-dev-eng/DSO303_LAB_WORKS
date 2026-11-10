@@ -39,7 +39,7 @@ Application Load Balancers are commonly used for:
 
 ## 4. System Architecture / Design
 
-![USMS load balancer architecture](../../screenshots/Lab-5/architecture.png)
+
 
 *Clients reach the load balancer nodes in the public subnets through the internet gateway. The listener applies its rule, then forwards to the target group, and `usms-enrolment-sg` admits traffic to the private Fargate tasks only from the load balancer's security group. The dashed arrow is the service registering its tasks, which this Floci build did not perform. Source: own diagram of the resources built in this lab.*
 

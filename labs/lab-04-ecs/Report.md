@@ -39,7 +39,7 @@ ECS is commonly used for:
 
 ## 4. System Architecture / Design
 
-![USMS enrolment service architecture](../../screenshots/Lab-4/architecture.png)
+
 
 *Students reach the web tier through the internet gateway. Only the web tier may call the two private Fargate tasks on port 80. Tasks reach the image registry outbound through the NAT gateway, and the engineer controls ECS through the AWS CLI. Source: own diagram of the resources built in this lab.*
 
